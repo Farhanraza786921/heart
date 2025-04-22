@@ -9,19 +9,19 @@ body {
 
 @layer base {
   :root {
-    --background: 20 14.3% 46.1%;
-    --foreground: 60 9.1% 95.1%;
-    --card: 20 14.3% 46.1%;
-    --card-foreground: 60 9.1% 95.1%;
-    --popover: 20 14.3% 46.1%;
-    --popover-foreground: 60 9.1% 95.1%;
-    --primary: 140 44.4% 49%;
+    --background: 0 0% 98%; /* Light grey background */
+    --foreground: 0 0% 15%; /* Dark grey for text */
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 15%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 15%;
+    --primary: 140 44.4% 49%; /* Teal Accent */
     --primary-foreground: 60 9.1% 95.1%;
     --secondary: 30 10.6% 17.8%;
     --secondary-foreground: 60 4.8% 95.9%;
     --muted: 30 10.6% 17.8%;
     --muted-foreground: 30 7.7% 60%;
-    --accent: 140 44.4% 49%;
+    --accent: 140 44.4% 49%; /* Teal Accent */
     --accent-foreground: 60 9.1% 95.1%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -34,8 +34,8 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 20 14.3% 46.1%;
-    --sidebar-foreground: 60 9.1% 95.1%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 15%;
     --sidebar-primary: 140 44.4% 49%;
     --sidebar-primary-foreground: 60 9.1% 95.1%;
     --sidebar-accent: 140 44.4% 49%;
@@ -87,4 +87,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
