@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'WebChatty',
+  title: 'HEARTGPT',
   description: 'A chat application powered by a local LLM using Genkit.',
 };
 
