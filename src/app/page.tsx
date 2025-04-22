@@ -30,7 +30,7 @@ export default function Home() {
       try {
         const result = await generateInitialPrompt({});
         setInitialPrompt(result.prompt);
-        setMessages([{ text: result.prompt, isUser: false }]);
+        setMessages([{text: result.prompt, isUser: false}]);
       } catch (error: any) {
         toast({
           title: 'Error',
