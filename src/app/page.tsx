@@ -1,46 +1,43 @@
 'use client';
 
-import {useState, useRef, useEffect} from 'react';
+import React from 'react';
 import {Textarea} from '@/components/ui/textarea';
 import {Button} from '@/components/ui/button';
-import {generateInitialPrompt} from '@/ai/flows/generate-initial-prompt';
 import {useToast} from '@/hooks/use-toast';
 import {cn} from '@/lib/utils';
 import {Send} from 'lucide-react';
-import {summarizeChatHistory} from '@/ai/flows/summarize-chat-history'; // Import summarizeChatHistory
-import {ai} from '@/ai/ai-instance';
+import {summarizeChatHistory} from '@/ai/flows/summarize-chat-history';
+import {generateInitialPrompt} from '@/ai/flows/generate-initial-prompt';
+import {chat} from '@/ai/flows/chat-flow';
+import {Toaster} from '@/components/ui/toaster';
 
 export default function Home() {
-  const [messages, setMessages] = useState<
-    {text: string; isUser: boolean}[]
-  >([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = React.useState<{text: string; isUser: boolean}[]>([]);
+  const [input, setInput] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
   const {toast} = useToast();
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [initialPrompt, setInitialPrompt] = useState<string | null>(null);
-  const [chatHistory, setChatHistory] = useState('');
-  const [summarizedHistory, setSummarizedHistory] = useState('');
+  const chatContainerRef = React.useRef<HTMLDivElement>(null);
+  const [chatHistory, setChatHistory] = React.useState('');
+  const [summarizedHistory, setSummarizedHistory] = React.useState('');
 
-  useEffect(() => {
-    const fetchInitialPrompt = async () => {
+  React.useEffect(() => {
+    // Load initial prompt on component mount
+    const loadInitialPrompt = async () => {
       try {
-        const result = await generateInitialPrompt({});
-        setInitialPrompt(result.prompt);
-        setMessages([{text: result.prompt, isUser: false}]);
-        setChatHistory(result.prompt + '\n');
+        const initialPromptResult = await generateInitialPrompt({});
+        setMessages([{text: initialPromptResult.prompt, isUser: false}]);
       } catch (error: any) {
         toast({
           title: 'Error',
-          description: error.message || 'Failed to get initial prompt.',
+          description: error.message || 'Failed to load initial prompt.',
           variant: 'destructive',
         });
       }
     };
-    fetchInitialPrompt();
-  }, []);
+    loadInitialPrompt();
+  }, [toast]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Scroll to bottom when messages change
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -59,18 +56,21 @@ export default function Home() {
 
     try {
       // Call Genkit flow for AI response
-      const aiResponseText = await getAIResponse(input, summarizedHistory + chatHistory);
+      const aiResponseResult = await chat({
+        userMessage: input,
+        chatHistory: summarizedHistory + chatHistory,
+      });
       const aiResponse = {
-        text: aiResponseText,
+        text: aiResponseResult.aiResponse,
         isUser: false,
       };
       setMessages(prev => [...prev, aiResponse]);
-      setChatHistory(prevChatHistory => prevChatHistory + 'AI: ' + aiResponseText + '\n');
+      setChatHistory(prevChatHistory => prevChatHistory + 'AI: ' + aiResponseResult.aiResponse + '\n');
 
       // Summarize chat history if it gets too long
       if (chatHistory.length > 1000) {
-        const summary = await summarizeChatHistory({chatHistory: chatHistory});
-        setSummarizedHistory(summary.summary + '\n');
+        const summaryResult = await summarizeChatHistory({chatHistory: chatHistory});
+        setSummarizedHistory(summaryResult.summary + '\n');
         setChatHistory('');
       }
     } catch (error: any) {
@@ -83,19 +83,6 @@ export default function Home() {
       setIsLoading(false);
     }
   };
-
-  // Define the getAIResponse function to interact with a Genkit flow
-  async function getAIResponse(userMessage: string, history: string): Promise<string> {
-    // This is a placeholder, replace with your actual Genkit flow invocation
-    // For example, if you had a flow named 'chatFlow':
-    const response = await ai.callPrompt({
-      prompt: `You are a helpful assistant. Respond to the user based on the following context:
-Context: ${history}
-User: ${userMessage}
-Assistant:`,
-      });
-    return response.output;
-  }
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -147,5 +134,3 @@ Assistant:`,
     </div>
   );
 }
-
-import { Toaster } from "@/components/ui/toaster"

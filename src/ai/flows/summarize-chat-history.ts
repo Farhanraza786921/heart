@@ -1,4 +1,3 @@
-// Summarizes the chat history for WebChatty to maintain context in long conversations.
 'use server';
 
 import {ai} from '@/ai/ai-instance';

@@ -1,5 +1,3 @@
-# Firebase Studio
+# WebChatty
 
-This is a NextJS starter in Firebase Studio.
-
-To get started, take a look at src/app/page.tsx.
+A Next.js chat application powered by a local LLM using Genkit.

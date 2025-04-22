@@ -1,4 +1,3 @@
-// src/ai/flows/generate-initial-prompt.ts
 'use server';
 /**
  * @fileOverview This file defines a Genkit flow to generate an initial conversation prompt for new users.
