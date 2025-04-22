@@ -32,14 +32,7 @@ const prompt = ai.definePrompt({
       prompt: z.string().describe('The initial conversation prompt for the user.'),
     }),
   },
-  prompt: `You are an AI assistant designed to engage new users in conversation.
-  Generate a single, interesting and engaging initial prompt for the user to start a conversation with you.
-  The prompt should be open-ended and encourage the user to explore your capabilities.
-  Do not greet the user or introduce yourself, just give the prompt.
-
-  Example Prompt: "If you could have any superpower, what would it be and why?"
-
-  Your Prompt:`, // Removed extra newlines
+  prompt: `HEARTGPT`, // Removed extra newlines
 });
 
 const generateInitialPromptFlow = ai.defineFlow<
@@ -53,3 +46,4 @@ const generateInitialPromptFlow = ai.defineFlow<
   const {output} = await prompt(input);
   return output!;
 });
+
