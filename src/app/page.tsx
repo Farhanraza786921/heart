@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -10,6 +11,7 @@ import {summarizeChatHistory} from '@/ai/flows/summarize-chat-history';
 import {generateInitialPrompt} from '@/ai/flows/generate-initial-prompt';
 import {chat} from '@/ai/flows/chat-flow';
 import {Toaster} from '@/components/ui/toaster';
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
 export default function Home() {
   const [messages, setMessages] = React.useState<{text: string; isUser: boolean}[]>([]);
@@ -88,34 +90,56 @@ export default function Home() {
     <div className="flex flex-col h-screen bg-background">
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-2"
+        className="flex-1 overflow-y-auto p-6 space-y-4"
       >
         {messages.map((message, index) => (
           <div
             key={index}
             className={cn(
-              'rounded-lg p-3 w-fit max-w-[80%]',
+              'rounded-xl p-4 w-fit max-w-[80%] glassmorphism',
               message.isUser
-                ? 'ml-auto bg-primary text-primary-foreground'
-                : 'mr-auto bg-secondary text-secondary-foreground'
+                ? 'ml-auto text-primary-foreground'
+                : 'mr-auto text-secondary-foreground'
             )}
           >
-            {message.text}
+            {message.isUser && (
+                <div className="flex items-center space-x-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="https://picsum.photos/id/237/200/200" alt="User Avatar" />
+                    <AvatarFallback>US</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium">You</p>
+                  </div>
+                </div>
+            )}
+            {!message.isUser && (
+                <div className="flex items-center space-x-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=7" alt="AI Avatar" />
+                    <AvatarFallback>AI</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium">HEARTGPT</p>
+                  </div>
+                </div>
+            )}
+            <div className="mt-2">{message.text}</div>
           </div>
         ))}
         {isLoading && (
-          <div className="mr-auto bg-secondary text-secondary-foreground rounded-lg p-3 w-fit">
+          <div className="mr-auto bg-secondary text-secondary-foreground rounded-xl p-4 w-fit glassmorphism">
             Thinking...
           </div>
         )}
       </div>
-      <div className="p-4 border-t">
+      <div className="p-6 border-t glassmorphism">
         <div className="flex gap-3">
           <Textarea
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="Enter your message..."
-            className="resize-none shadow-sm"
+            className="resize-none shadow-sm glassmorphism"
             rows={1}
             onKeyDown={e => {
               if (e.key === 'Enter' && !e.shiftKey) {
